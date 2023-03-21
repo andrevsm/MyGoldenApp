@@ -1,6 +1,6 @@
 # my_golden
 
-My Golden Retrivier App
+My Golden Retriever App
 
 ## Getting Started
 
