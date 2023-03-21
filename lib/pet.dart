@@ -7,7 +7,13 @@ class Pet extends StatelessWidget {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
+    bool favorite = false;
+
     final String imageUrl = args['url'];
+    if (null != args['favorite']) {
+      favorite = args['favorite'];
+    }
+
     return Scaffold(
       backgroundColor: MyColors.goldenLightColor,
       appBar: AppBar(
@@ -49,9 +55,7 @@ class Pet extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 // handle button press here
-                Navigator.pushReplacementNamed(context, '/home', arguments: {
-                  'favorite': imageUrl,
-                });
+                Navigator.pop(context, imageUrl);
               },
               child: const Text(
                 'LIKE!',

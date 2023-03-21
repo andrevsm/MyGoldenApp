@@ -40,17 +40,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic>? args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-
-    if(args?['favorite'] != null) {
-      String imageUrl = args?['favorite'];
-      if (!favoriteImages.contains(imageUrl)) {
-        favoriteImages.add(imageUrl);
-      }
-      print('FavoriteImages: $favoriteImages');
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -70,7 +59,9 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.favorite),
             onPressed: () {
               // Navegar para a tela de Favoritos
-              Navigator.pushNamed(context, '/favorites');
+              Navigator.pushNamed(context, '/favorites', arguments: {
+                "listFavorites": favoriteImages,
+              });
             },
           ),
         ],
@@ -108,7 +99,7 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       Navigator.pushNamed(context, '/pet', arguments: {
                         'url': _images[index],
-                      });
+                      }).then((value) => favoriteImages.add(_images[index]));
                     },
                     child: Image.network(
                       _images[index],
