@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
     super.initState();
     _loadImages();
     myFavoritesList = firestore.collection('favoriteImagesUrls');
+    getFavoriteImages();
   }
 
   Future<void> _loadImages() async {
@@ -120,6 +121,15 @@ class _HomeState extends State<Home> {
       ],
     );
   }
+
+  Future<void> getFavoriteImages() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final CollectionReference myFavoritesList = firestore.collection('favoriteImagesUrls');
+    final DocumentSnapshot snapshot = await myFavoritesList.doc('urls').get();
+    List<dynamic> list = snapshot.get('favoriteImages');
+    favoriteImages = list.map((item) => item.toString()).toList();
+  }
+
 
   Future<void> addImages(String imageUrl) async {
     if (!favoriteImages.contains(imageUrl)) {
