@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       Navigator.pushNamed(context, '/pet', arguments: {
                         'url': _images[index],
-                      }).then((value) => favoriteImages.add(_images[index]));
+                      }).then((value) => addImages(_images[index]));
                     },
                     child: Image.network(
                       _images[index],
@@ -117,5 +117,11 @@ class _HomeState extends State<Home> {
         _isLoading ? CircularProgressIndicator() : Container(),
       ],
     );
+  }
+
+  void addImages(String imageUrl) {
+    if (!favoriteImages.contains(imageUrl)) {
+      favoriteImages.add(imageUrl);
+    }
   }
 }
