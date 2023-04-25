@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,13 +13,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<String> _images = [];
   List<String> favoriteImages = [];
-  int _page = 0;
   bool _isLoading = false;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late CollectionReference myFavoritesList;
 
   @override
   void initState() {
     super.initState();
     _loadImages();
+    myFavoritesList = firestore.collection('favoriteImagesUrls');
   }
 
   Future<void> _loadImages() async {
@@ -80,7 +83,6 @@ class _HomeState extends State<Home> {
               if (!_isLoading &&
                   scrollInfo.metrics.pixels ==
                       scrollInfo.metrics.maxScrollExtent) {
-                _page++;
                 _loadImages();
               }
               return true;
@@ -119,9 +121,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void addImages(String imageUrl) {
+  Future<void> addImages(String imageUrl) async {
     if (!favoriteImages.contains(imageUrl)) {
       favoriteImages.add(imageUrl);
+      await myFavoritesList.doc('urls').set({'favoriteImages' : favoriteImages});
     }
   }
 }
